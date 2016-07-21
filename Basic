@@ -1,0 +1,109 @@
+#random Beispiele:
+
+#Random Int: -> as wenn man eine alias erstellen möchten
+
+from random import randint as rint
+
+print(rint(10, 100))
+
+#Randmom listen(choice)
+
+import random as r
+
+ListItem = ['Das', 'ist', 'ein', 'Beispiel']
+
+print(r.choice(ListItem))
+
+#Main
+###########################################################################
+#Eigene Module können erstellt werden und wenn sie um gleichen verzeichnis
+#sind wie andere Pythonscripts, können sie genutzt werden. 
+#Erstellen von Module -> def mein modul. 
+
+#Python-Dateien, die in ihrem Kontext nur 
+#als Modul verwendet werden, brauchen keine main()-Funktion.
+#In der Regel steckt man in diese Funktion nur so Dinge wie das 
+#Parsen und# Auswerten der mitgegebenen Argumente. 
+#Die eigentlichen Aktionen, für die das Programm geschrieben wurde, 
+#sollten in gesonderte Funktionen ausgelagert werden. Diese werden dann
+#in Abhängigkeit der gewünschten 
+#Optionen aus main() heraus aufgerufen, könnten aber ebenso "extern" benutzt werden
+###########################################################################
+
+######### Klassen ########
+class test_KLasse:
+
+        #konstrutor -> Erstellt die Parameter des objekts
+        # self greift auf sich self zu.
+
+        def __init__(self, par1, par2):
+                self.parameter = par1 #inizialisiert parameter
+                self.parameter2 = par2
+
+        def funktion_der_Klasse(self):
+                print(self.parameter)
+                print(self.parameter2)
+
+#erstellt variable-> greif auf klassenparameter zu und gibt ihnen Werte mit
+
+def main():
+        mein_variable = test_KLasse("Giancarlo", 15)
+        mein_variable.funktion_der_Klasse() #Damit werden die Parameter ausgegeben
+
+if __name__ == "__main__":
+        main()
+
+
+################ Vererbungen ################
+
+#Eine Klasse kann Attribute(Parameter und Funktionen)
+#von einer Klasse übernehmen(Child-Class)
+
+
+class test_Hauptklasse:
+
+        #konstrutor -> Erstellt die Parameter des objekts
+        # self greift auf sich self zu.
+
+        def __init__(self, par1, par2):
+                self.parameter = par1 #inizialisiert parameter
+                self.parameter2 = par2
+
+        def funktion_der_Klasse(self):
+                print(self.parameter)
+                print(self.parameter2)
+
+class test_unterklasse(test_Hauptklasse):
+	#Konstruktor von Unterklass
+	def __init__(self, par1, par2, parunter):
+	#greift auf den Konstruktor von Hauptklasse zu
+		super() .__init__(par1, par2)
+		self.parunter = parunter
+
+	#kann die hauptfunktion überschrieben werden
+	def funktion_der_Klasse(self):
+		print(self.parameter)
+                print(self.parameter2)
+		print(self.parunter)	
+
+def main():
+	meine_variable = test_unterklasse("Hombre", 25, "das ist mein parunter")
+	meine_variable.funktion_der_Klasse() #ruft die vordefinierte Werte auf
+
+
+
+if __name__ == "__main__":
+        main()
+
+
+
+
+
+
+
+
+
+
+
+
+ 
