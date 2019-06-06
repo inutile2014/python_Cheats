@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+# import pandas as pd
+# from matplotlib import pyplot as plt
+#
+#
+# df = pd.read_csv(r'bugbounty.csv')
+# print(df.groupby(['Vulnabillity', 'Applikation']).count())
+#print(df.Vulnabillity.iloc[2])
+
+# import pandas as pd
+# from matplotlib import pyplot as plt
+#
+#
+#
+# df = pd.read_csv(r'bugbounty.csv')
+# print(plt.plot(df.Vulnabillity, df.Applikation))
+# plt.show()
+
+
+import pandas as pd
+from matplotlib import pyplot as plt
+
+
+def vuln():
+
+    df = pd.read_csv(r'bugbounty.csv')
+    var= df.groupby(['Vulnabillity' ]).count().stack()
+    temp = var.unstack()
+    type(temp)
+    x_list = temp['Applikation']
+    label_list = temp.index
+    explode = (0, 0, 0, 0, 0, 0, 0.1)
+    colors = ['#ff0000','#66b3ff','#99ff99','#ffdd99', '#ff0450', '#ff9999']
+    plt.axis("equal") # Kreisdiagramm rund gestaltet (sonst Standard: oval!)
+    plt.pie(x_list, explode=explode, labels=label_list, autopct="%1.1f%%", colors=colors)
+    plt.title('Bug Bounty Meldungen')
+    plt.show()
+
+def app():
+
+    df = pd.read_csv(r'bugbounty.csv')
+    var= df.groupby(['Applikation' ]).count().stack()
+    temp = var.unstack()
+    type(temp)
+    x_list = temp['Vulnabillity']
+    label_list = temp.index
+    explode = (0, 0, 0, 0.1)
+    plt.axis("equal") # Kreisdiagramm rund gestaltet (sonst Standard: oval!)
+    plt.pie(x_list, explode=explode, labels=label_list, autopct="%1.1f%%")
+    plt.title('Prozentuale Schachstellen pro Applikationen')
+    plt.show()
+
+vuln(), app()
