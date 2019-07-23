@@ -1,7 +1,5 @@
 import pyshark
 
-
-
 # def dns_cap():
 #     cap_dns = pyshark.FileCapture('/home/UserDir/Dokumente/networkmon/capture.cap', display_filter="dns")
 #     for pkt in cap_dns:
@@ -32,22 +30,14 @@ import pyshark
 
 
 
-
-def protocol_cap():
-    cap_protocol = pyshark.FileCapture('/home/UserDir/Dokumente/networkmon/capture.cap', display_filter="tcp")
-    cap_dns = pyshark.FileCapture('/home/UserDir/Dokumente/networkmon/capture.cap', display_filter="dns")
+cap_dns = pyshark.FileCapture('/home/UserDir/Dokumente/networkmon/capture.cap', display_filter="dns")
+def dns_cap():
 
     if cap_dns.srcport == 80:
-        for pkt in cap_protocol and cap_dns:
-                print('Communication IPs: ', pkt.ip.dst, ':', pkt.ip.src)
+        for pkt in cap:
+                print(pkt.dns.qry_name, ':', pkt.ip.src, 'from - to', pkt.ip.dst)
                 print('---------------------------------------------------------------------------------------------')
-    elif dns.src.port == 443:
-        for pkt in cap_protocol and cap_dns:   
-                print('Communication IPs: ', pkt.ip.dst, ':', pkt.ip.src)
-                print('---------------------------------------------------------------------------------------------')
-    else:
-        for pkt in cap_protocol and cap_dns:
-                print('The following Ports are used: ', pkt.tcp.srcport, ':', pkt.tcp.dstport)   
+                print( pkt.ip.src, 'from - to', pkt.ip.dst, ':', pkt[pkt.transport_layer].dstport, 'Port')
 
 protocol_cap()
 
