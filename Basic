@@ -14,96 +14,268 @@ ListItem = ['Das', 'ist', 'ein', 'Beispiel']
 
 print(r.choice(ListItem))
 
-#Main
-###########################################################################
-#Eigene Module können erstellt werden und wenn sie um gleichen verzeichnis
-#sind wie andere Pythonscripts, können sie genutzt werden. 
-#Erstellen von Module -> def mein modul. 
+-------------
 
-#Python-Dateien, die in ihrem Kontext nur 
-#als Modul verwendet werden, brauchen keine main()-Funktion.
-#In der Regel steckt man in diese Funktion nur so Dinge wie das 
-#Parsen und# Auswerten der mitgegebenen Argumente. 
-#Die eigentlichen Aktionen, für die das Programm geschrieben wurde, 
-#sollten in gesonderte Funktionen ausgelagert werden. Diese werden dann
-#in Abhängigkeit der gewünschten 
-#Optionen aus main() heraus aufgerufen, könnten aber ebenso "extern" benutzt werden
-###########################################################################
+#Error handling
+number = input("pls input a nr: ")
 
-######### Klassen ########
-class test_KLasse:
+try:
+    number = float(number)
+    print("ur nr is: ", number)
+except:
+    print("pls a nr not a string")
+    
+----------------------
+#function example
+def sayhell(name):
+    print("Hello", name)
 
-        #konstrutor -> Erstellt die Parameter des objekts
-        # self greift auf sich self zu.
-
-        def __init__(self, par1, par2):
-                self.parameter = par1 #inizialisiert parameter
-                self.parameter2 = par2
-
-        def funktion_der_Klasse(self):
-                print(self.parameter)
-                print(self.parameter2)
-
-#erstellt variable-> greif auf klassenparameter zu und gibt ihnen Werte mit
-
-def main():
-        mein_variable = test_KLasse("Giancarlo", 15)
-        mein_variable.funktion_der_Klasse() #Damit werden die Parameter ausgegeben
-
-if __name__ == "__main__":
-        main()
+sayhell("Mike")
 
 
-################ Vererbungen ################
+def fahr2cel(fahr):
+    celsius = (5 * (fahr - 32) )/ 9
+    return celsius
 
-#Eine Klasse kann Attribute(Parameter und Funktionen)
-#von einer Klasse übernehmen(Child-Class)
+print("Fahr 2 cel is: ", round(fahr2cel(99),2))
 
+--------------
 
-class test_Hauptklasse:
+# a quiz / Api call / json / for and while example
+import requests
+import json
+import random
+import html
+#create a quiz. user can choice if want to quit
+url = "https://opentdb.com/api.php?amount=1&category=12&difficulty=easy&type=multiple"
 
-        #konstrutor -> Erstellt die Parameter des objekts
-        # self greift auf sich self zu.
-
-        def __init__(self, par1, par2):
-                self.parameter = par1 #inizialisiert parameter
-                self.parameter2 = par2
-
-        def funktion_der_Klasse(self):
-                print(self.parameter)
-                print(self.parameter2)
-
-class test_unterklasse(test_Hauptklasse):
-	#Konstruktor von Unterklass
-	def __init__(self, par1, par2, parunter):
-	#greift auf den Konstruktor von Hauptklasse zu
-		super() .__init__(par1, par2)
-		self.parunter = parunter
-
-	#kann die hauptfunktion überschrieben werden
-	def funktion_der_Klasse(self):
-		print(self.parameter)
-                print(self.parameter2)
-		print(self.parunter)	
-
-def main():
-	meine_variable = test_unterklasse("Hombre", 25, "das ist mein parunter")
-	meine_variable.funktion_der_Klasse() #ruft die vordefinierte Werte auf
-
+while True:
+    r = requests.get(url)
+    # print(r.text)
+    load_questions= json.loads(r.text)
+    correct_answer= load_questions["results"][0]["correct_answer"]
+    questions= load_questions["results"][0]["question"]
+    print("if you find the correct answer, denn gehts ke flättere:")
+    input("press enter to start")
+    print(questions)
+    user_anwer=input("U answer:")
+    if user_anwer.lower() == correct_answer.lower():
+        print("Tip top")
+    else:
+        print("schlächt")
+    ende=input("wenn sotpp, dann ende: ")
+    if ende =="ende":
+        break
+print("ende gut alles gut")
 
 
-if __name__ == "__main__":
-        main()
+endGame = ""
+
+while endGame != "quit":
+    r = requests.get(url)
+    if(r.status_code != 200):
+        endGame=("something get wrong with the con. press enter or type quit")
+    else:
+        answer_number = 1
+        data = json.loads(r.text)
+        question = data["results"][0]["question"]
+        answer = data["results"][0]["incorrect_answers"]
+        correct_answer = data["results"][0]["correct_answer"]
+        #to give a chance to find the corret answer, this var create a choice possibility -Using schaffel array:random.shuffle(answer)
+        answer.append(correct_answer)
+        random.shuffle(answer)
+        #escape html entities:
+        print(html.unescape(question + "\n"))
+        for answers in answer:
+            print(str(answer_number)+ "- " + html.unescape(answers))
+            answer_number += 1
+        user_answer = input("\n Type the nr of correct answer: ")
+        #the user answer will be compared with the  listed pissible answers. Becaus it is an array we have to use -1
+        user_answer = answers[int(user_answer)-1]
+        if user_answer == correct_answer:
+            print("congrats: " + html.unescape(correct_answer))
+        else:
+            print("wrong : " + html.unescape(correct_answer))
+        endGame = input("\nEnter, play again or quit: ").lower()
+print("ende gut alles gut")
+
+import requests
+import json
+
+# create a quiz api using open trivia db -> google for quiz api
+
+url = "https://opentdb.com/api.php?amount=1&category=12&difficulty=easy&type=multiple"
+r = requests.get(url)
+# print(r.text)
+questions= json.loads(r.text)
+#extract the a value of the json format
+# response_code	0
+# results
+# 0
+# category	"Entertainment: Music"
+# type	"multiple"
+# difficulty	"easy"
+# question	"What is the frontman&#039;s name of the metal band Megadeth?"
+# correct_answer	"Dave Mustaine"
+# incorrect_answers
+# 0	"Rob Halford"
+# 1	"Vince Neil"
+# 2	"James Hetfield"
+#goeal is to extract the category. it is in the result. array in the first then category. It is an dict, so use []
+print(questions["results"][0]["category"])
+
+print(questions["results"][0]["incorrect_answers"])
+
+#creat a a dict an convert output in json. use dump -> this convert it to a string
+
+person={"Name": "John", "age": 30}
+person_json=json.dumps(person)
+
+print(person_json)
 
 
+-------------------
+
+# matplot exampl
+import matplotlib.pyplot as plt
+
+#create a simple chart
+x = [1,2,3,4]
+y=[1600, 1800, 1900, 2200]
+
+# plt.plot(y,x)
+#
+# plt.show()
 
 
+#create a simple chart with a legend
+
+legend=("jan","feb","mar","apr")
+    # plt.xticks(x,legend)
+    # plt.plot(x,y)
+    #
+    # plt.show()
 
 
+# a bar chart with a title and a label
+plt.bar(x,y)
+plt.title("Mt Sale")
+#title of y and x bar
+plt.ylabel("Sales in $")
+plt.xlabel("Month")
+
+plt.show()
+
+#matplot + time example
+import time as t
+import matplotlib.pyplot as plt
+
+#A user must write for 5 times a word and check how long he takes and what mistake he makes
 
 
+time = []
+fehler = 0
+print("write 5 timees the word culo")
+input("press enter to start")
+
+while len(time) < 5:
+    start = t.time()
+    word = input("Word:" )
+    end = t.time()
+    time_elaps= end -start
+
+    time.append(time_elaps)
+
+    if (word.lower() != "culo"):
+        fehler +=1
+
+print("falsch " + str(fehler) )
+
+x = ["1","2","3","4","5"]
+y = time
+
+plt.plot(x,y)
+plt.title("Versuch/Zeit")
+#title of y and x bar
+plt.ylabel("Zeit")
+plt.xlabel("Anzahl")
+plt.show()
+
+-----------
+
+# request example
+
+import requests as r
 
 
+url ="https://google.com"
+
+#simple get request
+r.get(url)
+get_url= r.get(url)
+
+print(get_url.status_code)
+
+#print headers
+print(get_url.headers)
+
+#access to an element present in the header
+print(get_url.headers["Date"])
+
+# get the whole code of the page
+
+print(get_url.text)
 
 
- 
+------------
+
+# time example
+
+import time as t
+
+#current time
+
+current_time = t.localtime()
+#hour
+print(str(current_time.tm_hour))
+
+
+#epochtime
+
+ecpoch_t = t.time()
+
+print (ecpoch_t)
+
+
+# example: e packet will arrive to customer in 7 days and u want to say when it is: If u want to calculate different date use epoche time
+#ctime translate epoche time to a string format
+
+time_now= t.time()
+delivery_time= time_now + (86400 * 7)
+
+print(t.ctime(delivery_time))
+
+-----------------
+
+# file handling 
+
+# open a file
+# f = open("text.txt", "r")
+#
+# print (f.read())
+
+# write in a file. Take care it overwrite the content
+f = open("text.txt", "w")
+f.write("my new text")
+f = open("text.txt", "r")
+print (f.read())
+#append some text
+
+f = open("text.txt", "a")
+f.write("\nappend this text")
+f = open("text.txt", "r")
+print (f.read())
+
+# create a new File -> "x"
+a = open("text2.txt", "x")
+
